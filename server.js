@@ -7,22 +7,23 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
 
 
 app.get('/api/prices', async (req, res) => {
   try {
-    const response = await fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin&vs_currencies=usd'
-    );
+    const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
 
     if (!response.ok) throw new Error("No se pudo obtener respuesta");
 
     const data = await response.json();
 
     const prices = {
-      bitcoin: { usd: data.bitcoin.usd },
-      ethereum: { usd: data.ethereum.usd },
-      litecoin: { usd: data.litecoin.usd }
+      bitcoin: { usd: parseFloat(data.data[0].priceUsd).toFixed(2) },
+      ethereum: { usd: parseFloat(data.data[1].priceUsd).toFixed(2) },
+      litecoin: { usd: parseFloat(data.data[2].priceUsd).toFixed(2) }
     };
 
     res.json(prices);
@@ -31,3 +32,4 @@ app.get('/api/prices', async (req, res) => {
     res.status(500).json({ error: 'Error al traer precios' });
   }
 });
+
