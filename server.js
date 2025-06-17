@@ -7,15 +7,20 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
 app.get('/api/prices', async (req, res) => {
   try {
-    const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
-    const bodyText = await response.text();
+    const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin', {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
 
+    const bodyText = await response.text();
     console.log('BODY:', bodyText);
     console.log('STATUS:', response.status);
 
