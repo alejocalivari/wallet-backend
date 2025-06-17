@@ -16,7 +16,8 @@ app.get('/api/prices', async (req, res) => {
   try {
     const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin', {
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; AlejoWallet/1.0)'
       }
     });
 
