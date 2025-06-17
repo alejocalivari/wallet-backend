@@ -11,7 +11,6 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
-
 app.get('/api/prices', async (req, res) => {
   try {
     const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
@@ -30,7 +29,7 @@ app.get('/api/prices', async (req, res) => {
       litecoin: { usd: parseFloat(data.data[2].priceUsd).toFixed(2) }
     };
 
-    res.json(prices); // ← CIERRE CORRECTO DEL TRY ACÁ
+    res.json(prices);
   } catch (error) {
     console.error("Error al traer datos externos:\n", error);
     res.status(500).json({ error: 'Error al traer precios' });
