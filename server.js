@@ -14,21 +14,25 @@ app.listen(PORT, () => {
 
 app.get('/api/prices', async (req, res) => {
   try {
-  // ...
-  console.log('BODY:', bodyText);
-  console.log('STATUS:', response.status);
+    const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
+    const bodyText = await response.text();
 
-  const data = JSON.parse(bodyText);
+    console.log('BODY:', bodyText);
+    console.log('STATUS:', response.status);
 
-  const prices = {
-    bitcoin: { usd: parseFloat(data.data[0].priceUsd).toFixed(2) },
-    ethereum: { usd: parseFloat(data.data[1].priceUsd).toFixed(2) },
-    litecoin: { usd: parseFloat(data.data[2].priceUsd).toFixed(2) }
-  };
+    if (!response.ok) throw new Error("Respuesta no OK");
 
-  res.json(prices);
+    const data = JSON.parse(bodyText);
 
-} catch (error) {
-  console.error("Error al traer datos externos:\n", error);
-  res.status(500).json({ error: 'Error al traer precios' });
-}
+    const prices = {
+      bitcoin: { usd: parseFloat(data.data[0].priceUsd).toFixed(2) },
+      ethereum: { usd: parseFloat(data.data[1].priceUsd).toFixed(2) },
+      litecoin: { usd: parseFloat(data.data[2].priceUsd).toFixed(2) }
+    };
+
+    res.json(prices); // ← CIERRE CORRECTO DEL TRY ACÁ
+  } catch (error) {
+    console.error("Error al traer datos externos:\n", error);
+    res.status(500).json({ error: 'Error al traer precios' });
+  }
+});
