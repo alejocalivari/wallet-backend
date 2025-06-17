@@ -14,12 +14,11 @@ app.listen(PORT, () => {
 
 app.get('/api/prices', async (req, res) => {
   try {
-  const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
-  const bodyText = await response.text();
+  // ...
+  console.log('BODY:', bodyText);
+  console.log('STATUS:', response.status);
 
-  if (!response.ok) throw new Error("Respuesta no OK");
-
-  const data = JSON.parse(bodyText); // 👈 parseás solo si es texto válido
+  const data = JSON.parse(bodyText);
 
   const prices = {
     bitcoin: { usd: parseFloat(data.data[0].priceUsd).toFixed(2) },
@@ -28,8 +27,8 @@ app.get('/api/prices', async (req, res) => {
   };
 
   res.json(prices);
+
 } catch (error) {
-  console.error("Error al traer datos externos:\n", error); // 👈 Mostrar el error real
+  console.error("Error al traer datos externos:\n", error);
   res.status(500).json({ error: 'Error al traer precios' });
 }
-
