@@ -10,7 +10,8 @@ const PORT = 3000;
 
 app.get('/api/prices', async (req, res) => {
   try {
-    const response = await fetch('https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
+    const response = await fetch(
+  'https://api.coincap.io/v2/assets?ids=bitcoin,ethereum,litecoin');
     const data = await response.json();
 
     const prices = {
@@ -22,7 +23,8 @@ app.get('/api/prices', async (req, res) => {
     res.json(prices);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al traer precios' });
+    console.error("Error al traer datos externos:", error);
+  res.status(500).json({ error: 'Error al traer precios' });
   }
 });
 
